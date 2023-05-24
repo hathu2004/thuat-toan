@@ -1,61 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void sap_xep(string s)
+int binary_search(int a[],int left,int right, int value)
 {
-    vector<string>chu;
-    vector<int>so;
-    vector<string>xau;
-    stringstream ss(s);
-    string tmp;
-    while(ss>>tmp)
+    int ans=0;
+    while(left<=right)
     {
-        xau.push_back(tmp);
+        int middle=(right+left)/2;
+        if(a[middle]<=value){ans=middle;left=middle+1;}
+        else{right=middle-1;}
     }
-    for(string str : xau)
-    {
-        if(str[0]>='a'&&str[0]<='z'){str.pop_back();chu.push_back(str);}
-        else
-        {
-            str.pop_back();
-            int res=stoi(str);
-            so.push_back(res);
-        }
-    }
-    sort(chu.begin(),chu.end());
-    sort(so.begin(),so.end());
-    int i=0,j=0,k=0;
-    for(string str : xau)
-    {
-      if(k!=xau.size()-1)
-      {
-        if(str[0]>='a'&&str[0]<='z')
-        {
-            cout<<chu[i]<<", ";
-            i++;
-        }
-        else
-        {
-            cout<<so[j]<<", ";
-            j++;
-        }
-      }
-      else
-      {
-         if(str[0]>='a'&&str[0]<='z'){cout<<chu[i]<<".";}
-         else {cout<<so[j]<<".";}
-      }
-      k++;
-    }
+    return ans;
 }
 int main()
 {
-    while(true)
+    int n,m;
+    cin>>n>>m;
+    int a[n];
+    for(int i=0;i<n;i++)
     {
-        string s;
-        getline(cin,s);
-        if(s=="."){break;}
-        else{sap_xep(s);cout<<endl;}
+        cin>>a[i];
     }
+    sort(a,a+n);
+    int result,min=a[n-1];
+    for(int i=0;i<n-2;i++)
+    {
+        for(int j=i+2;j<n;j++)
+        {
+            if(2*a[i]+a[j]<m)
+            {
+                int mid=binary_search(a,i+1,j-1,m-a[i]-a[j]);
+                if(m-a[i]-a[j]-a[mid]<min){min=m-a[i]-a[j]-a[mid];result=a[i]+a[j]+a[mid];}
+            }
+        }
+    }
+    cout<<result;
     return 0;
 }
